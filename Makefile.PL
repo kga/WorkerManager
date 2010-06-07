@@ -1,3 +1,4 @@
+use strict;
 use inc::Module::Install;
 
 name 'WorkerManager';
@@ -12,9 +13,17 @@ requires 'Time::Piece';
 requires 'UNIVERSAL::require';
 requires 'DBI';
 
-recommends 'TheSchwartz';
-recommends 'TheSchwartz::Simple';
+features
+    'Use TheSchwartz' => [
+        -default => 0,
+        recommends 'TheSchwartz',
+        recommends 'TheSchwartz::Simple',
+    ],
+    'Use Gearman' => [
+        -default => 0,
+        recommends 'Gearman',
+    ];
 
-recommends 'Gearman';
+auto_install;
 
 WriteAll;
