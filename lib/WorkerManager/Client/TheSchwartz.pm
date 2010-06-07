@@ -7,11 +7,11 @@ use TheSchwartz::Simple;
 
 sub new {
     my ($class, $args) = @_;
-    my $dns = $args->{dns} || 'dbi:mysql:dbname=theschwartz;host=192.168.3.54';
+    my $dsn = $args->{dsn} || 'dbi:mysql:dbname=theschwartz;host=192.168.3.54';
     my $user = $args->{user} || 'nobody';
     my $pass = $args->{pass} || 'nobody';
 
-    my $dbh = DBI->connect($dns, $user, $pass);
+    my $dbh = DBI->connect($dsn, $user, $pass);
     my $client = TheSchwartz::Simple->new([$dbh]);
     my $self = bless {
         client => $client,
