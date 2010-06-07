@@ -1,4 +1,3 @@
-use strict;
 use inc::Module::Install;
 
 name 'WorkerManager';
@@ -21,7 +20,7 @@ features
     ],
     'Use Gearman' => [
         -default => 0,
-        recommends 'Gearman',
+        recommends 'Gearman::Worker',
     ];
 
 auto_install;
