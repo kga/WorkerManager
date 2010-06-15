@@ -172,14 +172,20 @@ sub set_signal_handlers_for_child {
 
 sub terminate_all_children {
     my $self = shift;
-    warn "terminating. children: " . join(",", keys %{$self->{pids}});
+
+    warn sprintf "%s terminating. children: %s",
+        localtime->datetime, join(",", keys %{$self->{pids}});
+
     kill "TERM", $_ for keys %{$self->{pids}};
     delete $self->{pids};
 }
 
 sub killall_children {
     my $self = shift;
-    warn "killing. children: " . join(",", keys %{$self->{pids}});
+
+    warn sprintf "%s killing. children: %s",
+        localtime->datetime, join(",", keys %{$self->{pids}});
+
     kill "INT", $_ for keys %{$self->{pids}};
     delete $self->{pids};
 }
