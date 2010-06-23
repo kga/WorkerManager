@@ -37,20 +37,21 @@ sub init {
             my $msg = shift;
             my $job = shift;
             # $WorkerManager::LOGGER->('TheSchwartz', $msg) if($msg =~ /Working/);
-            if($msg =~ /Working/){
+            if ($msg =~ /Working/) {
                 $self->{start_time} = time;
             }
-            return if($msg =~ /found no jobs/);
-            if($msg =~ /^job completed|^job failed/){
-                $msg .= sprintf " %s", $job->funcname;
-                $msg .= sprintf " process:%d", (time - $self->{start_time}) * 1000 if($self->{start_time});
+            return if $msg =~ /found no jobs/;
+            if ($msg =~ /^job completed|^job failed/) {
+                $msg .= sprintf " %s funcid:%d jobid:%d", $job->funcname, $job->funcid, $job->jobid;
+                $msg .= sprintf " process:%d", (time - $self->{start_time}) * 1000 if $self->{start_time};
                 $msg .= sprintf " delay:%d", ($self->{start_time} - $job->insert_time) * 1000 if($job && $self->{start_time});
                 $self->{start_time} = undef;
-            };
-            $WorkerManager::LOGGER->('TheSchwartz', $msg) unless($msg =~ /found no jobs/);
-        });
-    if (UNIVERSAL::isa($self->{worker}, 'ARRAY')){
-        for (@{$self->{worker}}){
+            }
+            $WorkerManager::LOGGER->('TheSchwartz', $msg) unless $msg =~ /found no jobs/;
+        }
+    );
+    if (UNIVERSAL::isa($self->{worker}, 'ARRAY')) {
+        for (@{$self->{worker}}) {
             "$_"->use or warn $@;
             $_->can('work') or die "cannot ${_}->work";
             $self->{client}->can_do($_);
@@ -72,7 +73,7 @@ sub work {
             die "my dad may be killed.";
             exit(1);
         }
-        if($self->{client}->work_once){
+        if ($self->{client}->work_once) {
             $count++;
         } else {
             sleep $delay;
