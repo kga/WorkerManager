@@ -72,7 +72,7 @@ sub init {
     }
 
     my $worker_client_class = "WorkerManager::" . $self->{type};
-    $worker_client_class->use or die $@;
+    $worker_client_class->use or die $LOGGER->($@);
     $self->{client} = $worker_client_class->new($self->{worker}, $self->{worker_options}) or die;
 
     $self->{pm} = Parallel::ForkManager->new($self->{max_processes})
