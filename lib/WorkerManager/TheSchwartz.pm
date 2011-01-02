@@ -49,8 +49,8 @@ sub init {
                 $self->{start_time} = undef;
             } elsif ($msg =~ /^TheSchwartz::work_once got job of class /) {
                 my $arg = $job->arg;
-                $msg .= sprintf "\n%s", q( ) x 20;
-                $msg .= JSON->new->allow_nonref->allow_blessed->ascii->encode($arg);
+                $msg .= sprintf ", jobid:%d\n%s", $job->jobid, q( ) x 20;
+                $msg .= sprintf 'arg: %s', JSON->new->allow_nonref->allow_blessed->ascii->encode($arg);
             }
             $WorkerManager::LOGGER->('TheSchwartz', $msg) unless $msg =~ /found no jobs/;
         }
