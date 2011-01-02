@@ -5,6 +5,7 @@ use warnings;
 use TheSchwartz;
 use Time::Piece;
 use UNIVERSAL::require;
+use JSON ();
 use Time::HiRes qw( time );
 use POSIX qw(getppid);
 
@@ -46,6 +47,10 @@ sub init {
                 $msg .= sprintf " process:%d", (time - $self->{start_time}) * 1000 if $self->{start_time};
                 $msg .= sprintf " delay:%d", ($self->{start_time} - $job->insert_time) * 1000 if($job && $self->{start_time});
                 $self->{start_time} = undef;
+            } elsif ($msg =~ /^TheSchwartz::work_once got job of class /) {
+                my $arg = $job->arg;
+                $msg .= sprintf "\n%s", q( ) x 20;
+                $msg .= JSON->new->allow_nonref->allow_blessed->ascii->encode($arg);
             }
             $WorkerManager::LOGGER->('TheSchwartz', $msg) unless $msg =~ /found no jobs/;
         }
